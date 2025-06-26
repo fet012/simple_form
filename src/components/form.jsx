@@ -139,7 +139,7 @@ const FormComponent = () => {
           alt="Company Logo" 
           className="logo"
         />
-        <h1 className="form-title">Online Registration</h1>
+        {/* <h1 className="form-title">Online Registration</h1> */}
         <p className="form-subtitle">
           Please fill out the form below to complete your registration
         </p>
@@ -213,7 +213,7 @@ const FormComponent = () => {
                 Phone <span className="required">*</span>
               </label>
               <input
-                type="tel"
+                type='number'
                 id="phone"
                 name="phone"
                 value={formData.phone}
