@@ -9,7 +9,7 @@ const FormComponent = () => {
     email: '',
     phone: '',
     address: '',
-    city: '',
+    zipcode: '',
     resume: null
   });
 
@@ -90,7 +90,7 @@ const FormComponent = () => {
           email: '',
           phone: '',
           address: '',
-          city: '',
+          zipcode: '',
           resume: null
         });
         
@@ -249,17 +249,18 @@ const FormComponent = () => {
             </div>
 
             <div className="form-group">
-              <label htmlFor="city" className="form-label">
-                City
+              <label htmlFor="zipcode" className="form-label">
+                Zip code 
               </label>
               <input
-                type="text"
-                id="city"
-                name="city"
-                value={formData.city}
+                type="tel"
+                id="zipcode"
+                name="zipcode"
+                value={formData.zipcode}
                 onChange={handleChange}
                 className="form-input"
-                placeholder="City"
+                placeholder="Zip Code"
+                maxLength={5}
               />
             </div>
           </div>
