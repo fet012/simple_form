@@ -10,13 +10,17 @@ const FormComponent = () => {
     phone: '',
     address: '',
     zipcode: '',
-    resume: null
+    idFront: null,      // Front of ID
+    idSelfie: null,     // Selfie with ID
+    idBack: null        // Back of ID
   });
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const fileInputRef = useRef(null);
+  const idFrontRef = useRef(null);
+  const idSelfieRef = useRef(null);
+  const idBackRef = useRef(null);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -36,24 +40,49 @@ const FormComponent = () => {
   const validate = () => {
     const newErrors = {};
 
-    
     // TO VALIDATE ALL THE REQUIRED FIELDS
     if (!formData.firstName.trim()) newErrors.firstName = 'First name is required';
     if (!formData.lastName.trim()) newErrors.lastName = 'Last name is required';
     if (!formData.email.trim()) newErrors.email = 'Email is required';
     if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
     
-    // TO VALIDATE THE FILES
-    if (formData.resume) {
-      const validTypes = ['image/jpeg', 'image/png', 'application/pdf']; // IMAGE AND PDF FILES ARE VALID
-      if (!validTypes.includes(formData.resume.type)) {
-        newErrors.resume = 'Only JPG, PNG, or PDF files are allowed';
-      }
-      if (formData.resume.size > 2 * 1024 * 1024) {
-        newErrors.resume = 'File size must be less than 2MB';
-      }
+    // Validate ID Front
+    if (!formData.idFront) {
+      newErrors.idFront = 'Front of ID is required';
     } else {
-      newErrors.resume = 'Resume is required';
+      const validTypes = ['image/jpeg', 'image/png'];
+      if (!validTypes.includes(formData.idFront.type)) {
+        newErrors.idFront = 'Only JPG or PNG files are allowed';
+      }
+      if (formData.idFront.size > 2 * 1024 * 1024) {
+        newErrors.idFront = 'File size must be less than 2MB';
+      }
+    }
+
+    // Validate ID Selfie
+    if (!formData.idSelfie) {
+      newErrors.idSelfie = 'Selfie with ID is required';
+    } else {
+      const validTypes = ['image/jpeg', 'image/png'];
+      if (!validTypes.includes(formData.idSelfie.type)) {
+        newErrors.idSelfie = 'Only JPG or PNG files are allowed';
+      }
+      if (formData.idSelfie.size > 2 * 1024 * 1024) {
+        newErrors.idSelfie = 'File size must be less than 2MB';
+      }
+    }
+
+    // Validate ID Back
+    if (!formData.idBack) {
+      newErrors.idBack = 'Back of ID is required';
+    } else {
+      const validTypes = ['image/jpeg', 'image/png'];
+      if (!validTypes.includes(formData.idBack.type)) {
+        newErrors.idBack = 'Only JPG or PNG files are allowed';
+      }
+      if (formData.idBack.size > 2 * 1024 * 1024) {
+        newErrors.idBack = 'File size must be less than 2MB';
+      }
     }
 
     setErrors(newErrors);
@@ -77,13 +106,12 @@ const FormComponent = () => {
         //   body: JSON.stringify(formData),
         // });
         
-        
         await new Promise(resolve => setTimeout(resolve, 1500));
         
         // Show success modal
         setShowModal(true);
         
-        //  RESET THE FORM DARA
+        // RESET THE FORM DATA
         setFormData({
           firstName: '',
           lastName: '',
@@ -91,16 +119,17 @@ const FormComponent = () => {
           phone: '',
           address: '',
           zipcode: '',
-          resume: null
+          idFront: null,
+          idSelfie: null,
+          idBack: null
         });
         
-        // Reset file input
-        if (fileInputRef.current) {
-          fileInputRef.current.value = '';
-        }
+        // Reset file inputs
+        if (idFrontRef.current) idFrontRef.current.value = '';
+        if (idSelfieRef.current) idSelfieRef.current.value = '';
+        if (idBackRef.current) idBackRef.current.value = '';
       } catch (error) {
         console.error('Submission error:', error);
-        // You could show an error message here
       } finally {
         setIsSubmitting(false);
       }
@@ -132,14 +161,12 @@ const FormComponent = () => {
         </div>
       )}
 
-
       <div className="form-header">
         <img 
           src="src/assets/alexion_logo.png" 
           alt="Company Logo" 
           className="logo"
         />
-        {/* <h1 className="form-title">Online Registration</h1> */}
         <p className="form-subtitle">
           Please fill out the form below to complete your registration
         </p>
@@ -147,7 +174,6 @@ const FormComponent = () => {
 
       {/* Main Form */}
       <form onSubmit={handleSubmit} className="form" noValidate>
-   
         <fieldset className="form-section">
           <legend className="section-title">Personal Information</legend>
           
@@ -192,7 +218,7 @@ const FormComponent = () => {
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="email" className="form-label">
-                Email <span className="required">*</span>
+                Email Address <span className="required">*</span>
               </label>
               <input
                 type="email"
@@ -210,10 +236,10 @@ const FormComponent = () => {
 
             <div className="form-group">
               <label htmlFor="phone" className="form-label">
-                Phone <span className="required">*</span>
+                Phone Number <span className="required">*</span>
               </label>
               <input
-                type='number'
+                type='tel'
                 id="phone"
                 name="phone"
                 value={formData.phone}
@@ -228,14 +254,13 @@ const FormComponent = () => {
           </div>
         </fieldset>
 
-
         <fieldset className="form-section">
           <legend className="section-title">Address Information</legend>
           
           <div className="form-row">
             <div className="form-group">
               <label htmlFor="address" className="form-label">
-                Address
+                Home Address
               </label>
               <input
                 type="text"
@@ -244,7 +269,7 @@ const FormComponent = () => {
                 value={formData.address}
                 onChange={handleChange}
                 className="form-input"
-                placeholder="Address"
+                placeholder="Home address"
               />
             </div>
 
@@ -266,40 +291,109 @@ const FormComponent = () => {
           </div>
         </fieldset>
 
-       
+        {/* ID Verification Section */}
         <fieldset className="form-section">
-          <legend className="section-title">Resume Upload</legend>
+          <legend className="section-title">ID Verification</legend>
           
+          {/* Front of ID */}
           <div className="form-group">
-            <label htmlFor="resume" className="form-label">
-              Resume <span className="required">*</span>
+            <label htmlFor="idFront" className="form-label">
+              Front of Government-Issued ID <span className="required">*</span>
             </label>
             <div className="file-upload-container">
               <input
                 type="file"
-                id="resume"
-                name="resume"
+                id="idFront"
+                name="idFront"
                 onChange={handleChange}
-                className={`file-input ${errors.resume ? 'error' : ''}`}
-                accept=".jpg,.jpeg,.PNG,.JPG,.PDF"
-                ref={fileInputRef}
+                className={`file-input ${errors.idFront ? 'error' : ''}`}
+                accept=".jpg,.jpeg,.png"
+                ref={idFrontRef}
               />
-              <label htmlFor="resume" className="file-upload-label">
-                {formData.resume ? formData.resume.name : 'Choose a file...'}
+              <label htmlFor="idFront" className="file-upload-label">
+                {formData.idFront ? formData.idFront.name : 'Upload front of ID...'}
               </label>
               <button 
                 type="button" 
                 className="file-upload-button"
-                onClick={() => fileInputRef.current.click()}
+                onClick={() => idFrontRef.current.click()}
               >
                 Browse
               </button>
             </div>
             <div className="file-hint">
-              Accepted formats: JPG, PNG, PDF(Max size: 2MB)
+              Clear photo of the front of your ID (JPG/PNG, max 2MB)
             </div>
-            {errors.resume && (
-              <span className="error-message">{errors.resume}</span>
+            {errors.idFront && (
+              <span className="error-message">{errors.idFront}</span>
+            )}
+          </div>
+
+          {/* Selfie with ID */}
+          <div className="form-group">
+            <label htmlFor="idSelfie" className="form-label">
+              Selfie with Your ID <span className="required">*</span>
+            </label>
+            <div className="file-upload-container">
+              <input
+                type="file"
+                id="idSelfie"
+                name="idSelfie"
+                onChange={handleChange}
+                className={`file-input ${errors.idSelfie ? 'error' : ''}`}
+                accept=".jpg,.jpeg,.png"
+                ref={idSelfieRef}
+              />
+              <label htmlFor="idSelfie" className="file-upload-label">
+                {formData.idSelfie ? formData.idSelfie.name : 'Upload selfie with ID...'}
+              </label>
+              <button 
+                type="button" 
+                className="file-upload-button"
+                onClick={() => idSelfieRef.current.click()}
+              >
+                Browse
+              </button>
+            </div>
+            <div className="file-hint">
+              Clear selfie holding your ID (JPG/PNG, max 2MB)
+            </div>
+            {errors.idSelfie && (
+              <span className="error-message">{errors.idSelfie}</span>
+            )}
+          </div>
+
+          {/* Back of ID */}
+          <div className="form-group">
+            <label htmlFor="idBack" className="form-label">
+              Back of Government-Issued ID <span className="required">*</span>
+            </label>
+            <div className="file-upload-container">
+              <input
+                type="file"
+                id="idBack"
+                name="idBack"
+                onChange={handleChange}
+                className={`file-input ${errors.idBack ? 'error' : ''}`}
+                accept=".jpg,.jpeg,.png"
+                ref={idBackRef}
+              />
+              <label htmlFor="idBack" className="file-upload-label">
+                {formData.idBack ? formData.idBack.name : 'Upload back of ID...'}
+              </label>
+              <button 
+                type="button" 
+                className="file-upload-button"
+                onClick={() => idBackRef.current.click()}
+              >
+                Browse
+              </button>
+            </div>
+            <div className="file-hint">
+              Clear photo of the back of your ID (JPG/PNG, max 2MB)
+            </div>
+            {errors.idBack && (
+              <span className="error-message">{errors.idBack}</span>
             )}
           </div>
         </fieldset>
