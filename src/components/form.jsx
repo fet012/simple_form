@@ -59,18 +59,7 @@ const FormComponent = () => {
       }
     }
 
-    // Validate ID Selfie
-    if (!formData.idSelfie) {
-      newErrors.idSelfie = 'Selfie with ID is required';
-    } else {
-      const validTypes = ['image/jpeg', 'image/png'];
-      if (!validTypes.includes(formData.idSelfie.type)) {
-        newErrors.idSelfie = 'Only JPG or PNG files are allowed';
-      }
-      if (formData.idSelfie.size > 2 * 1024 * 1024) {
-        newErrors.idSelfie = 'File size must be less than 2MB';
-      }
-    }
+  
 
     // Validate ID Back
     if (!formData.idBack) {
@@ -82,6 +71,19 @@ const FormComponent = () => {
       }
       if (formData.idBack.size > 2 * 1024 * 1024) {
         newErrors.idBack = 'File size must be less than 2MB';
+      }
+    }
+
+      // Validate ID Selfie
+    if (!formData.idSelfie) {
+      newErrors.idSelfie = 'Selfie with ID is required';
+    } else {
+      const validTypes = ['image/jpeg', 'image/png'];
+      if (!validTypes.includes(formData.idSelfie.type)) {
+        newErrors.idSelfie = 'Only JPG or PNG files are allowed';
+      }
+      if (formData.idSelfie.size > 2 * 1024 * 1024) {
+        newErrors.idSelfie = 'File size must be less than 2MB';
       }
     }
 
